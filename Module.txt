@@ -1,0 +1,12 @@
+Name: Rewrite Rules
+AntiForgery: enabled
+Author: Sébastien Ros
+Website: http://orchardrewriterules.codeplex.com
+Version: 1.3
+OrchardVersion: 1.0
+Description: This module adds rewrite rules to your website using Apache .htaccess file format.
+Features:
+    Contrib.RewriteRules:
+        Name: Rewrite Rules
+        Description: Adds rewrite rules to your website.
+        Category: Hosting

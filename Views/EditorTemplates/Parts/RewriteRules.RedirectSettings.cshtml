@@ -1,0 +1,19 @@
+@model Contrib.RewriteRules.Models.RedirectSettings
+@{
+    Layout.Title = @T("Rewrite Rules");
+}
+<fieldset>
+    <div>
+        @Html.EditorFor(m => m.IsEnabled)
+        <label for="@Html.FieldIdFor(m => m.IsEnabled)" class="forcheckbox">@T("Enable Rewrite Rules")</label>
+        @Html.ValidationMessage("Enabled", "*")
+    </div>
+    <div data-controllerid="@Html.FieldIdFor(m => m.IsEnabled)">
+        <div>
+            <label for="@Html.FieldIdFor(m => m.Rules)">@T("Rules")</label>
+            @Html.TextAreaFor(m => m.Rules, new { @class = "textMedium", rows = "5" } )
+            @Html.ValidationMessage("Rules", "*")
+            <span class="hint">@T("Use .htaccess rules conventions, c.f. {0}", new MvcHtmlString("<a href=\"http://httpd.apache.org/docs/current/mod/mod_rewrite.html\">http://httpd.apache.org/docs/current/mod/mod_rewrite.html</a>"))</span>
+        </div>
+    </div>
+</fieldset>

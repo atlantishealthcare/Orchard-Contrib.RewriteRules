@@ -1,0 +1,50 @@
+@model Contrib.RewriteRules.ViewModels.RulesViewModel
+
+@{
+    Layout.Title = T("Rewrite Rules");
+}
+<div>
+@using (Html.BeginFormAntiForgeryPost()) {
+<fieldset>
+    <label for="@Html.FieldIdFor(m => m.Url)">@T("Url to test")</label>
+    @Html.TextBoxFor(m => m.Url, new { @class = "textMedium" })
+</fieldset>
+<fieldset>
+    <label for="@Html.FieldIdFor(m => m.ApplicationPath)">@T("Application Path")</label>
+    @Html.TextBoxFor(m => m.ApplicationPath, new { @class = "textMedium" })
+    <span class="hint">@T("Optional, represents the virtual folder name if you use one. e.g., /OrchardLocal")</span>
+</fieldset>
+<fieldset>
+    <label for="@Html.FieldIdFor(m => m.Rules)">@T("Rules")</label>
+    @Html.TextAreaFor(m => m.Rules, new { @class = "textMedium", rows = "5" })
+    <span class="hint">@T("Use .htaccess rules conventions, c.f. {0}", new MvcHtmlString("<a href=\"http://httpd.apache.org/docs/current/mod/mod_rewrite.html\">http://httpd.apache.org/docs/current/mod/mod_rewrite.html</a>"))</span>
+</fieldset>
+<fieldset>
+    <button class="primaryAction" type="submit">@T("Simulate")</button>
+</fieldset>
+
+}    
+
+@if (Model.Result == null) {
+    <div>
+        <span>@T("The url doesn't match any rule.")</span>
+    </div>
+} else {
+    if (Model.Result is Contrib.RewriteRules.Services.TransferResult) {
+        <div>
+            <span>@T("Transfer to")</span>
+            <span>@(((Contrib.RewriteRules.Services.TransferResult)Model.Result).Url)</span>
+        </div>
+    } else if (Model.Result is RedirectResult) {
+        <div>
+            <span>@T("Redirect to")</span>
+            <span>@(((RedirectResult)Model.Result).Url)</span>
+        </div>
+    } else if (Model.Result is HttpStatusCodeResult) {
+        <div>
+            <span>@T("Return status code")</span>
+            <span>@(((HttpStatusCodeResult)Model.Result).StatusCode)</span>
+        </div>
+    }
+}    
+</div>
