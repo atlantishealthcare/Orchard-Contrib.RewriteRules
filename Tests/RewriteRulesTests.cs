@@ -281,15 +281,16 @@ namespace Contrib.RewriteRules.Tests {
             Assert.That(((RedirectResult)result).Url, Is.EqualTo("a"));
         }
 
-        [Test, ExpectedException(typeof(RuleEvaluationException), ExpectedMessage = "Environment variable not found: %{foo}")]
+        [Test]
         public void FlagEnvShouldBeReseted() {
-            var result = Execute(
+            Assert.That(() => Execute(
                             @"http://www.foo.org/a",
                             @"RewriteRule (a) - [E=foo:$1]
                                 RewriteRule (a) %{foo}
                                 RewriteRule (a) - [E=!foo]
-                                RewriteRule (a) %{foo}"
-            );
+                                RewriteRule (a) %{foo}"),
+                    Throws.TypeOf<RuleEvaluationException>()
+                );
         }
 
         [Test]
@@ -470,7 +471,7 @@ namespace Contrib.RewriteRules.Tests {
 
         [Test]
         public void ShouldHandleFlagType() {
-            _context.SetupSet(c => c.Request.ContentType).Callback(ct => Assert.That(ct, Is.EqualTo("application/x-foo")));
+            _context.SetupSet(p => p.Request.ContentType = It.IsAny<string>()).Callback<string>(ct => Assert.That(ct, Is.EqualTo("application/x-foo")));
 
             var result = Execute("http://www.foo.org/homepage.aspx",
                             @"RewriteRule ^/(.*)$ a [T=application/x-foo]");
